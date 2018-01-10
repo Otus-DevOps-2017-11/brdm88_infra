@@ -1,0 +1,7 @@
+{
+	"variables": {
+		"project_id": "infra-123456",
+		"source_image_family": "ubuntu-1604-xenial-v20170815a",
+		"machine_type": "f1-micro"
+	}
+}

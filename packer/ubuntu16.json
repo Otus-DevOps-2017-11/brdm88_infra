@@ -1,0 +1,49 @@
+{
+  "variables": {
+	"project_id": null,
+	"source_image_family": null,
+	"machine_type": "f1-micro"
+	Описание образа "source_image": "windows-server-2016-dc-v20170227",
+	image_description (string) - The description of the resulting image.
+	
+	Размер и тип диска "disk_size": "50", disk_type (string) -
+	Type of disk used to back your instance, like pd-ssd or pd-standard. Defaults to pd-standard.
+	
+	Название сети 
+	network (string) - The Google Compute network id or URL to use for the launched instance. 
+	Defaults to "default". If the value is not a URL, it will be interpolated to 
+	projects/((network_project_id))/global/networks/((network)). 
+	This value is not required if a subnet is specified.
+	
+	Теги
+	tags (array of strings)
+	
+	startup_script_file (string) -
+	The filepath to a startup script to run on the VM from which the image will be made.
+	
+  }  
+  "builders": [
+    {
+    "type": "googlecompute",
+    "project_id": "{{user `project_id`}}",
+    "image_name": "reddit-base-{{timestamp}}",
+    "image_family": "reddit-base",
+    "source_image_family": "{{user `source_image_family`}}",
+    "zone": "europe-west1-b",
+    "ssh_username": "brdm88",
+    "machine_type": "{{user `machine_type`}}"
+    }
+  ]
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "scripts/install_ruby.sh",
+      "execute_command": "sudo {{.Path}}"
+    }
+	{
+      "type": "shell",
+      "script": "scripts/install_mongodb.sh",
+      "execute_command": "sudo {{.Path}}"
+    }
+  ]
+}
