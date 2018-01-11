@@ -1,8 +1,10 @@
 #!/bin/bash
 
+install_dir=/opt
+
 echo "-----------------------------------------------------------------"
-echo "Getting and installing the App..."
-cd /opt
+echo `date`: "Getting and installing the REddit application..."
+cd $install_dir
 sudo git clone https://github.com/Otus-DevOps-2017-11/reddit.git
 cd reddit && bundle install
 
@@ -11,4 +13,4 @@ puma -d
 sleep 3
 ps aux | grep puma
 
-echo "Script completed!"
+echo "Script execution completed!"

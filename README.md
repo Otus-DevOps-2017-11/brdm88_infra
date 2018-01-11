@@ -4,13 +4,43 @@ Dmitry Bredikhin Infrastructure study repository
 Homework-06
 ===========
 
-##### Сценарии развертывания тестового приложения:
+##### Задача 1. Представлены сценарии развертывания тестового приложения:
 
  * install_ruby.sh
  * install_mongodb.sh
  * deploy.sh
 
+##### Дополнительная задача 1.
 
+Команда создания инстанса с использованием startup script (сам startup script находится локально на машине инженера):
+
+```
+gcloud compute instances create reddit-app\
+  --boot-disk-size=10GB \
+  --image-family ubuntu-1604-lts \
+  --image-project=ubuntu-os-cloud \
+  --machine-type=g1-small \
+  --tags puma-server \
+  --restart-on-failure \
+  --metadata startup-script=~/gcp-scripts/reddit_startup.sh
+```
+
+Вариант с startup-script-url:
+
+```
+```
+
+##### Дополнительная задача 2.
+
+Команда удаления правила файервола:
+
+```
+```
+
+Команда создания правила файервола:
+
+```
+```
 
 
 ----

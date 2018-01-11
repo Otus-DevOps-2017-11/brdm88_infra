@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "-----------------------------------------------------------------"
-echo "Installing MongoDB..."
+echo `date`: "Installing MongoDB..."
 
 # Add key and repo
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927 
@@ -19,4 +19,4 @@ echo "================================================================="
 echo "Checking MongoDB daemon..."
 sudo systemctl status mongod
 
-echo "Script completed!"
+echo "Script execution completed!"
