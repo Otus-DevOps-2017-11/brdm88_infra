@@ -12,7 +12,7 @@ Homework-06
 
 ##### Дополнительная задача 1.
 
-Команда создания инстанса с использованием startup script (сам startup script находится локально на машине инженера):
+Команда создания инстанса с использованием startup script (startup script находится локально на машине инженера в текущей директории, откуда выполняется команда):
 
 ```
 gcloud compute instances create reddit-app\
@@ -22,12 +22,20 @@ gcloud compute instances create reddit-app\
   --machine-type=g1-small \
   --tags puma-server \
   --restart-on-failure \
-  --metadata startup-script=~/gcp-scripts/reddit_startup.sh
+  --metadata-from-file startup-script=reddit_startup.sh
 ```
 
-Вариант с startup-script-url:
+Использование startup-script-url, при этом startup script был предварительно загружен в Storage Bucket:
 
 ```
+gcloud compute instances create reddit-app\
+  --boot-disk-size=10GB \
+  --image-family ubuntu-1604-lts \
+  --image-project=ubuntu-os-cloud \
+  --machine-type=g1-small \
+  --tags puma-server \
+  --restart-on-failure \
+  --metadata startup-script-url=gs://metadata_storage/reddit_startup.sh
 ```
 
 ##### Дополнительная задача 2.
@@ -35,11 +43,20 @@ gcloud compute instances create reddit-app\
 Команда удаления правила файервола:
 
 ```
+gcloud compute firewall-rules delete default-puma-server --quiet
 ```
 
 Команда создания правила файервола:
 
 ```
+gcloud compute firewall-rules create default-puma-server \
+  --direction=INGRESS \
+  --priority=1000 \
+  --network=default \
+  --action=ALLOW \
+  --rules=tcp:9292 \
+  --source-ranges=0.0.0.0/0 \
+  --target-tags=puma-server
 ```
 
 
