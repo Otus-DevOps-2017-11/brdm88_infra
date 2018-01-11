@@ -1,7 +1,22 @@
 ﻿# brdm88_infra
 Dmitry Bredikhin Infrastructure study repository
 
-Homework-5
+Homework-06
+===========
+
+##### Сценарии развертывания тестового приложения:
+
+ * install_ruby.sh
+ * install_mongodb.sh
+ * deploy.sh
+
+
+
+
+----
+----
+
+Homework-05
 ===========
 
 ----

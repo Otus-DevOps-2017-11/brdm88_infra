@@ -1,7 +1,10 @@
 #!/bin/bash
+echo "-----------------------------------------------------------------"
+echo "Installing Ruby..."
+sudo apt update && sudo apt install -y build-essential ruby-full ruby-bundler
 
-sudo apt update
-sudo apt install -y build-essential ruby-full ruby-bundler
-## if [ ! $(ruby -v && bundle -v) | grep -ei (ruby|Bundler) == '' ]; then
-	exit 1
-fi
+echo "================================================================="
+echo "Checking installed Ruby & Bundle versions..."
+ruby -v
+bundle -v
+echo "Script completed!"
