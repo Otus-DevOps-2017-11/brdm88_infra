@@ -11,5 +11,11 @@
 
  * immutable.json - шаблон для создания baked-образа приложения (image family: reddit-full). Использует файл переменных из базовой задачи
  * config-scripts/create-reddit-vm.sh - скрипт создания инстанса ВМ с приложением из baked-образа
-
-```
+ ----
+ * files/puma.service - systemd service конфигурация для puma server
+ * scripts/deploy_app.sh - скрипт деплоя приложения (gcloud)
+ 
+----
+Review: Nklya
+Labels: packer, homework-07
+----

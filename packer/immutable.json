@@ -40,8 +40,8 @@
     {
       "type": "file",
       "source": "files/puma.service",
-      "destination": "/etc/systemd/system/puma.service"
-    }
+      "destination": "/tmp/puma.service"
+    },
     {
       "type": "shell",
       "script": "scripts/deploy_app.sh",
