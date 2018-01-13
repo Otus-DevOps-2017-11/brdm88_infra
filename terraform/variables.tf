@@ -18,3 +18,13 @@ variable private_key_path {
 variable disk_image {
   description = "Disk image"
 }
+
+variable zone {
+  description = "Instance geographical zone"
+  default     = "europe-west1-b"
+}
+
+variable machine_type {
+  description = "GCE virtual machine type"
+  default     = "g1-small"
+}
