@@ -22,7 +22,13 @@
   * files/puma.service - systemd unit (service) файл конфигурации для puma server
   * scripts/deploy_app.sh - скрипт деплоя приложения
  ----
- * config-scripts/create-reddit-vm.sh - скрипт создания инстанса ВМ с приложением из baked-образа (gcloud)
+  * config-scripts/create-reddit-vm.sh - скрипт создания инстанса ВМ с приложением из baked-образа (gcloud)
+ 
+ Валидация и запуск создания образа, соответственно, выполняем командой
+ ```
+ packer validate -var-file=variables.json immutable.json
+ packer build -var-file=variables.json immutable.json
+ ```
  
 ----
 Review: Nklya
