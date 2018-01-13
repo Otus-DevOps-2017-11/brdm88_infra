@@ -1,8 +1,12 @@
+# Define Google Cloud provider
+
 provider "google" {
   version = "1.4.0"
   project = "${var.project}"
   region  = "${var.region}"
 }
+
+# Define the Instance resource created from base image
 
 resource "google_compute_instance" "app" {
   name         = "reddit-app"
@@ -23,16 +27,17 @@ resource "google_compute_instance" "app" {
   tags = ["reddit-app"]
 
   metadata {
-    sshKeys = "brdm88:${file(var.public_key_path)}"
+    sshKeys = "appuser:${file(var.public_key_path)}"
   }
 
   connection {
     type        = "ssh"
-    user        = "brdm88"
+    user        = "appuser"
     agent       = false
-    private_key = "${file("C:/Users/brdm/Documents/SSH/GCE.ppk")}"
+    private_key = "${file(var.private_key_path)}"
   }
 
+  # Define the app deploying provisioners
   provisioner "file" {
     source      = "files/puma.service"
     destination = "/tmp/puma.service"
@@ -42,6 +47,8 @@ resource "google_compute_instance" "app" {
     script = "files/deploy.sh"
   }
 }
+
+# Define firewall rule resource
 
 resource "google_compute_firewall" "firewall_puma" {
   name    = "allow-puma-default"
