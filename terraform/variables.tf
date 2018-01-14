@@ -19,7 +19,7 @@ variable disk_image {
   description = "Disk image"
 }
 
-variable zone {
+variable region_zone {
   description = "Instance geographical zone"
   default     = "europe-west1-b"
 }
@@ -27,4 +27,20 @@ variable zone {
 variable machine_type {
   description = "GCE virtual machine type"
   default     = "g1-small"
+}
+
+# Variables for additional tasks
+
+variable project_pubkey_path {
+  description = "Project-wide ssh public key"
+}
+
+variable project_ssh_user {
+  description = "User name for ssh access (project-wide)"
+  default     = "brdm88"
+}
+
+variable nodes_count {
+  description = "Application backend nodes count"
+  default     = "1"
 }
