@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 install_dir=/opt
 
 # Get the application source code and make install
