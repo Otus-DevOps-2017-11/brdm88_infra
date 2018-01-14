@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Create Reddit app VM from baked image
 echo "Creating VM from baked image..."
 
