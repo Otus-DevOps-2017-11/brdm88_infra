@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 logfile=/var/log/reddit_deploy.log
 install_dir=/opt
 
