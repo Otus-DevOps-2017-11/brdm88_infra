@@ -2,10 +2,6 @@
 Dmitry Bredikhin Infrastructure study repository
 
 
-----
-----
-
-
 Homework-07
 ===========
 
@@ -38,9 +34,9 @@ Homework-07
  packer build -var-file=variables.json immutable.json
  ```
 
-----
-----
 
+----
+----
 
 Homework-06
 ===========
