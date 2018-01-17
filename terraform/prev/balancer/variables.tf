@@ -44,15 +44,3 @@ variable nodes_count {
   description = "Application backend nodes count"
   default     = "1"
 }
-
-# Homework-09 variables
-
-variable app_disk_image {
-  description = "Reddit App disk image"
-  default     = "reddit-app-base"
-}
-
-variable db_disk_image {
-  description = "Reddit App disk image"
-  default     = "reddit-db-base"
-}

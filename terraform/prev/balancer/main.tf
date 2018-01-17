@@ -6,7 +6,7 @@ provider "google" {
   region  = "${var.region}"
 }
 
-## Additional task 1 hw-08 code: project-wide ssh keys
+## Additional task 1 code: project-wide ssh keys
 ################################################
 
 # Add project-wide ssh keys
@@ -20,17 +20,12 @@ resource "google_compute_project_metadata" "project_ssh_keys" {
   }
 }
 
-# External ip address resource definition
-resource "google_compute_address" "app_ip" {
-  name = "reddit-app-ip"
-}
-
 # Define the Instance creatinon from base image
 
 resource "google_compute_instance" "app" {
   count = "${var.nodes_count}"
 
-  name         = "reddit-app-${count.index + 1}"
+  name         = "reddit-app-${count.index}"
   machine_type = "${var.machine_type}"
   zone         = "${var.region_zone}"
 
@@ -41,11 +36,8 @@ resource "google_compute_instance" "app" {
   }
 
   network_interface {
-    network = "default"
-
-    access_config = {
-      nat_ip = "${google_compute_address.app_ip.address}"
-    }
+    network       = "default"
+    access_config = {}
   }
 
   tags = ["reddit-app"]
@@ -73,7 +65,7 @@ resource "google_compute_instance" "app" {
   }
 }
 
-# Define firewall rules resources
+# Define firewall rule resource
 
 resource "google_compute_firewall" "firewall_puma" {
   name    = "allow-puma-default"
@@ -88,20 +80,7 @@ resource "google_compute_firewall" "firewall_puma" {
   target_tags   = ["reddit-app"]
 }
 
-resource "google_compute_firewall" "firewall_ssh" {
-  name        = "default-allow-ssh"
-  description = "Allow SSH access from anywhere"
-  network     = "default"
-
-  allow {
-    protocol = "tcp"
-    ports    = ["22"]
-  }
-
-  source_ranges = ["0.0.0.0/0"]
-}
-
-## Additional task 2 hw-08 code: creating HTTP balancer
+## Additional task 2 code: creating HTTP balancer
 #################################################
 
 # Create instance group for backend puma servers
@@ -133,7 +112,6 @@ resource "google_compute_backend_service" "puma-backend-lb" {
   timeout_sec = 10
   port_name   = "puma-http"
 
-  # Test!
   #session_affinity = "CLIENT_IP"
 
   # Set created instance group as a backend
