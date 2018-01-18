@@ -13,10 +13,10 @@ provider "google" {
 
 resource "google_compute_project_metadata" "project_ssh_keys" {
   metadata {
-    ssh-keys = "appuser:${file(var.project_pubkey_path)}appuser2:${file(var.project_pubkey_path)}appuser3:${file(var.project_pubkey_path)}"
+    #ssh-keys = "appuser:${file(var.project_pubkey_path)}appuser2:${file(var.project_pubkey_path)}"
 
     # Personal key setting
-    #ssh-keys = "${var.project_ssh_user}:${file(var.project_pubkey_path)}"
+    ssh-keys = "${var.project_ssh_user}:${file(var.project_pubkey_path)}"
   }
 }
 
@@ -43,13 +43,13 @@ resource "google_compute_instance" "app" {
   tags = ["reddit-app"]
 
   metadata {
-    sshKeys = "appuser:${file(var.public_key_path)}"
+    sshKeys = "${var.project_ssh_user}:${file(var.public_key_path)}"
   }
 
   # Connection for the provisioners
   connection {
     type        = "ssh"
-    user        = "appuser"
+    user        = "${var.project_ssh_user}"
     agent       = false
     private_key = "${file(var.private_key_path)}"
   }
