@@ -4,5 +4,6 @@ public_key_path = "~/.ssh/user.pub"
 private_key_path = "~/.ssh/user"
 region_zone = "europe-west2-a"
 project_pubkey_path = "~/.ssh/appuser1.pub"
+project_ssh_user=appuser
 machine_type = "f1-micro"
 nodes_count = "2"
