@@ -65,7 +65,7 @@ resource "google_compute_instance" "app" {
   }
 }
 
-# Define firewall rule resource
+# Define firewall rules resource
 
 resource "google_compute_firewall" "firewall_puma" {
   name    = "allow-puma-default"
@@ -78,6 +78,19 @@ resource "google_compute_firewall" "firewall_puma" {
 
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["reddit-app"]
+}
+
+resource "google_compute_firewall" "firewall_ssh" {
+  name        = "default-allow-ssh"
+  description = "Allow SSH access from anywhere"
+  network     = "default"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["22"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
 }
 
 ## Additional task 2 code: creating HTTP balancer
