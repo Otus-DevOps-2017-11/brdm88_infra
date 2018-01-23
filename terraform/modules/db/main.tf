@@ -1,7 +1,9 @@
-resource "google_compute_instance" "db" {
-  name = "reddit-db"
+# Create VM instance for DB server
 
-  machine_type = "g1-small"
+resource "google_compute_instance" "db" {
+  name = "${var.db_instance_name}"
+
+  machine_type = "${var.machine_type}"
 
   zone = "${var.region_zone}"
 
@@ -20,9 +22,11 @@ resource "google_compute_instance" "db" {
   }
 
   metadata {
-    sshKeys = "appuser:${file(var.public_key_path)}"
+    sshKeys = "${var.project_ssh_user}:${file(var.public_key_path)}"
   }
 }
+
+# Add firewall rule allowing access to DB from app server
 
 resource "google_compute_firewall" "firewall_mongo" {
   name    = "allow-mongo-default"

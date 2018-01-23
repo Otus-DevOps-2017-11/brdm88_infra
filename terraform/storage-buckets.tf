@@ -1,3 +1,5 @@
+# Storage bucket external module test
+
 provider "google" {
   version = "1.4.0"
   project = "${var.project}"
