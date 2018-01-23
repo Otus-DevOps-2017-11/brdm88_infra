@@ -2,6 +2,10 @@ variable public_key_path {
   description = "Path to the public key used for ssh access"
 }
 
+variable private_key_path {
+  description = "Path to the private_key used for ssh access"
+}
+
 variable project_ssh_user {
   description = "User name for ssh access (project-wide)"
   default     = "brdm88"
@@ -24,5 +28,5 @@ variable machine_type {
 
 variable db_instance_name {
   description = "Database VM instance name"
-  default = "reddit-db"
+  default     = "reddit-db"
 }

@@ -1,9 +1,16 @@
 project = "project_id"
-disk_image = "reddit-base"
-public_key_path = "~/.ssh/user.pub"
-private_key_path = "~/.ssh/user"
 region_zone = "europe-west2-a"
-project_pubkey_path = "~/.ssh/appuser1.pub"
+project_pubkey_path = "~/.ssh/appuser.pub"
 project_ssh_user=appuser
+public_key_path = "~/.ssh/appuser.pub"
+private_key_path = "~/.ssh/appuser"
 machine_type = "f1-micro"
-nodes_count = "2"
+
+app_disk_image = "reddit-app-base"
+app_port = "9292"
+app_user = "appuser"
+app_workdir = "/home/appuser"
+
+db_disk_image = "reddit-db-base"
+
+ssh_source_ranges = ["0.0.0.0/0"]

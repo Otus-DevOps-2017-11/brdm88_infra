@@ -40,7 +40,7 @@ variable machine_type {
 
 variable app_instance_name {
   description = "Application VM instance name"
-  default = "reddit-app"
+  default     = "reddit-app"
 }
 
 variable app_disk_image {
@@ -60,14 +60,14 @@ variable app_user {
 
 variable app_workdir {
   description = "Reddit application working directory"
-  default     = "/opt"
+  default     = "/home/brdm88"
 }
 
 # DB associated vars
 
 variable db_instance_name {
   description = "Database VM instance name"
-  default = "reddit-db"
+  default     = "reddit-db"
 }
 
 variable db_disk_image {

@@ -24,6 +24,24 @@ resource "google_compute_instance" "db" {
   metadata {
     sshKeys = "${var.project_ssh_user}:${file(var.public_key_path)}"
   }
+
+  # Connection for the provisioners
+  connection {
+    type        = "ssh"
+    user        = "${var.project_ssh_user}"
+    agent       = false
+    private_key = "${file(var.private_key_path)}"
+  }
+
+  # Define the database config deploying provisioners
+
+  # Change bindIp from default "127.0.0.1" to "0.0.0.0" in /etc/mongod.conf file using sed and restart MongoDB
+  provisioner "remote-exec" {
+    inline = [
+      "sudo sed -i 's/127.0.0.1/0.0.0.0/' /etc/mongod.conf",
+      "sudo systemctl restart mongod",
+    ]
+  }
 }
 
 # Add firewall rule allowing access to DB from app server

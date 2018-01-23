@@ -23,7 +23,7 @@ variable machine_type {
 
 variable app_instance_name {
   description = "Application VM instance name"
-  default = "reddit-app"
+  default     = "reddit-app"
 }
 
 variable app_disk_image {

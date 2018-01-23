@@ -6,7 +6,7 @@ data "template_file" "puma_unitfile" {
   vars {
     app_user     = "${var.app_user}"
     app_workdir  = "${var.app_workdir}"
-    app_port = "${var.app_port}"
+    app_port     = "${var.app_port}"
     database_url = "${var.database_url}"
   }
 }
