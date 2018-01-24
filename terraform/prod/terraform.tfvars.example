@@ -4,7 +4,7 @@ project_pubkey_path = "~/.ssh/appuser.pub"
 project_ssh_user=appuser
 public_key_path = "~/.ssh/appuser.pub"
 private_key_path = "~/.ssh/appuser"
-machine_type = "f1-micro"
+machine_type = "g1-small"
 
 app_disk_image = "reddit-app-base"
 app_port = "9292"

@@ -6,6 +6,9 @@ public_key_path = "~/.ssh/appuser.pub"
 private_key_path = "~/.ssh/appuser"
 machine_type = "f1-micro"
 
+app_instance_name = "reddit-app-stage"
+db_instance_name = "reddit-db-stage"
+
 app_disk_image = "reddit-app-base"
 app_port = "9292"
 app_user = "appuser"
