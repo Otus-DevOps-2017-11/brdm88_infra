@@ -1,0 +1,4 @@
+﻿---
+- include: app.yml
+- include: db.yml
+- include: deploy.yml

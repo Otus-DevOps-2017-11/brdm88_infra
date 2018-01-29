@@ -17,7 +17,7 @@ resource "google_compute_address" "app_ip" {
   name = "reddit-app-ip"
 }
 
-# Create VM instance for DB server
+# Create VM instance for App server
 
 resource "google_compute_instance" "app" {
   name = "${var.app_instance_name}"

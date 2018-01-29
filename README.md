@@ -2,6 +2,22 @@
 Dmitry Bredikhin Infrastructure study repository
 
 
+Homework-11
+===========
+
+##### Один playbook, один сценарий.
+
+##### Один playbook, много сценариев.
+
+##### Много playbook-ов.
+
+##### Provisioning в Packer
+
+##### Дополнительное задание. Dynamic inventory
+
+
+----
+----
 
 Homework-10
 ===========
