@@ -45,7 +45,7 @@
       
     - name: enable puma service
       become: true
-      systemd: name=puma state=enabled
+      systemd: name=puma enabled=yes
       tags: app-tag
   
   handlers:

@@ -19,7 +19,7 @@
       notify: reload puma
       
     - name: enable puma service
-      systemd: name=puma state=enabled
+      systemd: name=puma enabled=yes
   
   handlers:
   - name: reload puma
