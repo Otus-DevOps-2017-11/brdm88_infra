@@ -5,18 +5,90 @@ Dmitry Bredikhin Infrastructure study repository
 Homework-11
 ===========
 
+##### Общие сведения.
+
+Конфигурационные файлы Ansible, созданные при выполнении данного задания, расположены в директории *ansible*.
+Inventory-файлы в альтернативных форматах и вспомогательные файлы из предыдущего задания помещены в папку *ansible/alt_invertories*.
+Конфигурационные файлы Terraform, использованные для выполнения данного задания ("облегченная" монолитная конфигурация, создающая инстансы без приложения),
+расположены в директории *terraform/stage_clean*.
+
+
 ##### Один playbook, один сценарий.
 
 Создан playbook *reddit_app_one_play.yml*, в котором описаны задачи конфигурации сервера БД (tag: `db-tag`) и приложения (tag: `app-tag`),
-а также установки/обновления приложения из репозитория (tag: `deploy-tag`).
+а также установки приложения из репозитория (tag: `deploy-tag`).
+
+Протестирован запуск плейбука с лимитирующими параметрами на различных частях инфраструктуры, приложение было успешно развернуто (ниже приведены команды для запуска).
+
+```
+ ansible-playbook reddit_app_one_play.yml --check --limit db --tags db-tag
+ ansible-playbook reddit_app_one_play.yml --limit db --tags db-tag
+ 
+ ansible-playbook reddit_app_one_play.yml --check --limit app --tags app-tag
+ ansible-playbook reddit_app_one_play.yml --limit app --tags app-tag
+ 
+ ansible-playbook reddit_app_one_play.yml --check --limit app --tags deploy-tag
+ ansible-playbook reddit_app_one_play.yml --limit app --tags deploy-tag
+```
+
 
 ##### Один playbook, много сценариев.
 
+Сценарий playbook-а из предыдущего блока разбит на несколько, в зависимости от целевых групп хостов, теги вынесены на уровень сценария.
+Файл playbook-а: *reddit_app_multiple_plays.yml*.
+
+Проверено успешное развертывание приложения.
+```
+ansible-playbook reddit_app_multiple_plays.yml --tags db-tag --check
+ansible-playbook reddit_app_multiple_plays.yml --tags db-tag
+ansible-playbook reddit_app_multiple_plays.yml --tags app-tag --check
+ansible-playbook reddit_app_multiple_plays.yml --tags app-tag
+ansible-playbook reddit_app_multiple_plays.yml --tags deploy-tag --check
+ansible-playbook reddit_app_multiple_plays.yml --tags deploy-tag
+```
+
+
 ##### Много playbook-ов.
+
+Playbook из предыдущего блока разбит на три: *db.yml*, *app.yml* и *deploy.yml*, соответственно реализующие конфигурацию хостов БД, web-сервера, 
+развертывание приложения. Также были исключены теги.
+Создан playbook *site.yml*, включающий в себя ссылки на вышеуказанные.
+
+Проверено успешное развертывание приложения.
+```
+ansible-playbook site.yml --check
+ansible-playbook site.yml
+```
+
 
 ##### Provisioning в Packer
 
-##### Дополнительное задание. Dynamic inventory
+Были созданы playbook-и *packer-db.yml* и *packer-app.yml*, реализующие соответственно устанокву окружений для серверов БД и приложения.
+Для реализации установки пакетов использованы следующие модули:
+ * `apt_key` - добавление apt-ключа
+ * `apt_repositroy` - добавление репозитория
+ * `apt` - установка пакетов через *apt*
+
+Для установки нескольких пакетов в одном task-е использован цикл (директива `with_items`).
+
+Конфигурационные файлы Packer, измененные в расках данного задания (`shell` provisioners заменены на `ansible`), 
+расположены в директории *packer/using-ansible* (`db.json` и `app.json`).
+
+Выполнено создание базовых образов с помощью Packer, развертывание инфраструктуры c помощью Terraform и деплой приложения с помощью Ansible.
+```
+ packer validate -var 'project_id=infra-190102' -var 'source_image_family=ubuntu-1604-lts' ./packer/using-ansible/db.json
+ packer build -var 'project_id=infra-190102' -var 'source_image_family=ubuntu-1604-lts' ./packer/using-ansible/db.json
+ 
+ packer validate -var 'project_id=infra-190102' -var 'source_image_family=ubuntu-1604-lts' ./packer/using-ansible/app.json
+ packer build -var 'project_id=infra-190102' -var 'source_image_family=ubuntu-1604-lts' ./packer/using-ansible/app.json
+
+```
+
+
+##### Дополнительное задание. Dynamic inventory.
+
+Для реализации динамического Inventory, в нашем случае формирования списка хостов на основе данных Google Compute Engine,
+в первую очередь необходимо предоставить Ansible данные авторизации для взаимодействия с GCE (credentials).
 
 
 ----

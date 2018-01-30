@@ -23,4 +23,4 @@
         state: present
         
     - name: enable mongod service
-      systemd: name=mongod state=enabled
+      systemd: name=mongod enabled=yes
