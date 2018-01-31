@@ -1,5 +1,5 @@
 ﻿- name: Deploy the latest App version
-  hosts: app
+  hosts: tag_reddit-app
   
   tasks:
     - name: Fetch the latest version of the application code from GitHub

@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 # Copyright 2013 Google Inc.
 #
 # This file is part of Ansible
@@ -20,10 +19,12 @@
 '''
 GCE external inventory script
 =================================
+
 Generates inventory that Ansible can understand by making API requests
 Google Compute Engine via the libcloud library.  Full install/configuration
 instructions for the gce* modules can be found in the comments of
 ansible/test/gce_tests.py.
+
 When run against a specific host, this script returns the following variables
 based on the data obtained from the libcloud Node object:
  - gce_uuid
@@ -40,6 +41,7 @@ based on the data obtained from the libcloud Node object:
  - gce_metadata
  - gce_network
  - gce_subnetwork
+
 When run in --list mode, instances are grouped by the following categories:
  - zone:
    zone group name examples are us-central1-b, europe-west1-a, etc.
@@ -59,11 +61,14 @@ When run in --list mode, instances are grouped by the following categories:
    used when creating the instance (e.g. debian-7-wheezy-v20130816).  when
    your instance was created with a root persistent disk it will be set to
    'persistent_disk' since there is no current way to determine the image.
+
 Examples:
   Execute uname on all instances in the us-central1-a zone
   $ ansible -i gce.py us-central1-a -m shell -a "/bin/uname -a"
+
   Use the GCE inventory script to print out instance specific information
   $ contrib/inventory/gce.py --host my_instance
+
 Author: Eric Johnson <erjohnso@google.com>
 Contributors: Matt Hite <mhite@hotmail.com>, Tom Melendez <supertom@google.com>
 Version: 0.0.3
@@ -196,6 +201,7 @@ class GceInventory(object):
     def get_config(self):
         """
         Reads the settings from the gce.ini file.
+
         Populates a SafeConfigParser object with defaults and
         attempts to read an .ini-style configuration from the filename
         specified in GCE_INI_PATH. If the environment variable is
@@ -499,4 +505,4 @@ class GceInventory(object):
 
 # Run the script
 if __name__ == '__main__':
-GceInventory()
+    GceInventory()

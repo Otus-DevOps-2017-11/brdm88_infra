@@ -1,5 +1,5 @@
 ﻿- name: Config the App hosts
-  hosts: app
+  hosts: tag_reddit-app
   become: true
   vars:
     db_host: 10.132.0.4

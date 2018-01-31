@@ -52,7 +52,7 @@ ansible-playbook reddit_app_multiple_plays.yml --tags deploy-tag
 
 Playbook из предыдущего блока разбит на три: *db.yml*, *app.yml* и *deploy.yml*, соответственно реализующие конфигурацию хостов БД, web-сервера, 
 развертывание приложения. Также были исключены теги.
-Создан playbook *site.yml*, включающий в себя ссылки на вышеуказанные.
+Создан playbook *site.yml*, включающий в себя ссылки на три вышеуказанных.
 
 Проверено успешное развертывание приложения.
 ```
@@ -71,25 +71,74 @@ ansible-playbook site.yml
 
 Для установки нескольких пакетов в одном task-е использован цикл (директива `with_items`).
 
-Конфигурационные файлы Packer, измененные в расках данного задания (`shell` provisioners заменены на `ansible`), 
+Конфигурационные файлы Packer, измененные в рамках данного задания (`shell` provisioners заменены на `ansible`), 
 расположены в директории *packer/using-ansible* (`db.json` и `app.json`).
 
 Выполнено создание базовых образов с помощью Packer, развертывание инфраструктуры c помощью Terraform и деплой приложения с помощью Ansible.
-```
- packer validate -var 'project_id=infra-190102' -var 'source_image_family=ubuntu-1604-lts' ./packer/using-ansible/db.json
- packer build -var 'project_id=infra-190102' -var 'source_image_family=ubuntu-1604-lts' ./packer/using-ansible/db.json
- 
- packer validate -var 'project_id=infra-190102' -var 'source_image_family=ubuntu-1604-lts' ./packer/using-ansible/app.json
- packer build -var 'project_id=infra-190102' -var 'source_image_family=ubuntu-1604-lts' ./packer/using-ansible/app.json
 
+Для корректной работы ansible provisioners в Packer требуется явное указание (в качестве параметра "user") пользователя, под которым на временном инстансе
+будет запущен Ansible (`ansible_user`), т.к. по умолчанию он запустится от имени того пользователя, который запустил Packer, и далее при выполнении
+провижионера возникает ошибка прав доступа.
+
+Листинг команд приведен ниже:
+
+``` 
+# VM images creation
+ packer validate -var-file=./packer/variables.json ./packer/using-ansible/db.json
+ packer build -var-file=./packer/variables.json -on-error=ask ./packer/using-ansible/db.json
+
+ packer validate -var-file=./packer/variables.json ./packer/using-ansible/app.json
+ packer build -var-file=./packer/variables.json ./packer/using-ansible/app.json
+```
+
+```
+# stage_clean environment deployment
+ terraform plan
+ terraform apply -auto-approve=true
+```
+
+```
+# Application deployment
+ ansible-playbook site.yml --check
+ ansible-playbook site.yml
 ```
 
 
 ##### Дополнительное задание. Dynamic inventory.
 
-Для реализации динамического Inventory, в нашем случае формирования списка хостов на основе данных Google Compute Engine,
-в первую очередь необходимо предоставить Ansible данные авторизации для взаимодействия с GCE (credentials).
+Для динамического Inventory в нашем случае формирование списка хостов возможно на основе данных либо от Google Compute Engine, либо от Terraform.
+Первый вариант более универсальный, не зависит от наличия средств управления инфраструктурой, но требует указания данных Service Account 
+для доступа к gcloud API.
+Второй вариант не требует данных авторизации GCP, однако требует установки отдельного приложения и актуален только если для управления инфраструктурой 
+используется Terraform.
 
+Файлы, созданные в рамках данного заданя, находятся в папке *ansible/dyn_inventory*. 
+
+**Реализация варианта 1**
+
+В первую очередь необходимо предоставить Ansible данные авторизации для взаимодействия с GCP (credentials).
+Предварительно создадим Service account key в формате JSON через оснастку 'APIs and Services -> Credentials' в Google Cloud Console.
+Далее, используем inventory-скрипт для GCE из репозитория Ansible: `https://github.com/ansible/ansible/blob/devel/contrib/inventory/gce.py`.
+В сопутствующем файле `gce.ini` указываем данные проекта и путь к json-файлу с ключами.
+Для того, чтобы указать *gce.py* расположение ini-файла, требуется задать значение переменной среды *GCE_INI_PATH*:
+`export GCE_INI_PATH=<full_path_to_gce_ini_file>`
+
+Для работы скрипта необходима *apache-libcloud*, ее можно предварительно установить с помощью `pip install apache-libcloud`.
+Для того, чтобы в репозиторий не были отправлены ключи авторизации сервисного аккаунта, необходимо добавить в файл *.gitignore* записи о 
+gce.ini и json-файле ключей, также создан файл *gce.ini.example* - пример заполнения ini-файла.
+
+Проверить работу скрипта можно с помощью его запуска с параметром `--list`, должны быть выведены полные данные об инстансах.
+Проверка работы Ansible на динамическом inventory, в качестве пути указываем скрипт: `ansible all -i ./dyn_inventory/gce.py -m ping`
+
+Группировка хостов в данном случае реализуется с помощью тегов инстансов (в загруженных playbook-ах имена групп хостов изменены под динамический inventory).
+
+Указание групп хостов по тегам производится следующим образом: `ansible tag_<tag_name>`. Пример: `ansible tag_reddit-app -m ping`
+
+Проверка деплоя конфигурации с помощью Ansible:
+```
+ ansible-playbook site.yml --check
+ ansible-playbook site.yml
+```
 
 ----
 ----
