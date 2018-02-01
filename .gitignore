@@ -4,3 +4,6 @@ packer/variables.json
 *.tfstate.backup
 *.tfvars
 .terraform/
+*.retry
+/ansible/dyn_inventory/*.json
+/ansible/dyn_inventory/gce.ini

@@ -2,6 +2,146 @@
 Dmitry Bredikhin Infrastructure study repository
 
 
+Homework-11
+===========
+
+##### Общие сведения.
+
+Конфигурационные файлы Ansible, созданные при выполнении данного задания, расположены в директории *ansible*.
+Inventory-файлы в альтернативных форматах и вспомогательные файлы из предыдущего задания помещены в папку *ansible/alt_invertories*.
+Конфигурационные файлы Terraform, использованные для выполнения данного задания ("облегченная" монолитная конфигурация, создающая инстансы без приложения),
+расположены в директории *terraform/stage_clean*.
+
+
+##### Один playbook, один сценарий.
+
+Создан playbook *reddit_app_one_play.yml*, в котором описаны задачи конфигурации сервера БД (tag: `db-tag`) и приложения (tag: `app-tag`),
+а также установки приложения из репозитория (tag: `deploy-tag`).
+
+Протестирован запуск плейбука с лимитирующими параметрами на различных частях инфраструктуры, приложение было успешно развернуто (ниже приведены команды для запуска).
+
+```
+ ansible-playbook reddit_app_one_play.yml --check --limit db --tags db-tag
+ ansible-playbook reddit_app_one_play.yml --limit db --tags db-tag
+ 
+ ansible-playbook reddit_app_one_play.yml --check --limit app --tags app-tag
+ ansible-playbook reddit_app_one_play.yml --limit app --tags app-tag
+ 
+ ansible-playbook reddit_app_one_play.yml --check --limit app --tags deploy-tag
+ ansible-playbook reddit_app_one_play.yml --limit app --tags deploy-tag
+```
+
+
+##### Один playbook, много сценариев.
+
+Сценарий playbook-а из предыдущего блока разбит на несколько, в зависимости от целевых групп хостов, теги вынесены на уровень сценария.
+Файл playbook-а: *reddit_app_multiple_plays.yml*.
+
+Проверено успешное развертывание приложения.
+```
+ansible-playbook reddit_app_multiple_plays.yml --tags db-tag --check
+ansible-playbook reddit_app_multiple_plays.yml --tags db-tag
+ansible-playbook reddit_app_multiple_plays.yml --tags app-tag --check
+ansible-playbook reddit_app_multiple_plays.yml --tags app-tag
+ansible-playbook reddit_app_multiple_plays.yml --tags deploy-tag --check
+ansible-playbook reddit_app_multiple_plays.yml --tags deploy-tag
+```
+
+
+##### Много playbook-ов.
+
+Playbook из предыдущего блока разбит на три: *db.yml*, *app.yml* и *deploy.yml*, соответственно реализующие конфигурацию хостов БД, web-сервера, 
+развертывание приложения. Также были исключены теги.
+Создан playbook *site.yml*, включающий в себя ссылки на три вышеуказанных.
+
+Проверено успешное развертывание приложения.
+```
+ansible-playbook site.yml --check
+ansible-playbook site.yml
+```
+
+
+##### Provisioning в Packer
+
+Были созданы playbook-и *packer-db.yml* и *packer-app.yml*, реализующие соответственно устанокву окружений для серверов БД и приложения.
+Для реализации установки пакетов использованы следующие модули:
+ * `apt_key` - добавление apt-ключа
+ * `apt_repositroy` - добавление репозитория
+ * `apt` - установка пакетов через *apt*
+
+Для установки нескольких пакетов в одном task-е использован цикл (директива `with_items`).
+
+Конфигурационные файлы Packer, измененные в рамках данного задания (`shell` provisioners заменены на `ansible`), 
+расположены в директории *packer/using-ansible* (`db.json` и `app.json`).
+
+Выполнено создание базовых образов с помощью Packer, развертывание инфраструктуры c помощью Terraform и деплой приложения с помощью Ansible.
+
+Для корректной работы ansible provisioners в Packer требуется явное указание (в качестве параметра "user") пользователя, под которым на временном инстансе
+будет запущен Ansible (`ansible_user`), т.к. по умолчанию он запустится от имени того пользователя, который запустил Packer, и далее при выполнении
+провижионера возникает ошибка прав доступа.
+
+Листинг команд приведен ниже:
+
+``` 
+# VM images creation
+ packer validate -var-file=./packer/variables.json ./packer/using-ansible/db.json
+ packer build -var-file=./packer/variables.json -on-error=ask ./packer/using-ansible/db.json
+
+ packer validate -var-file=./packer/variables.json ./packer/using-ansible/app.json
+ packer build -var-file=./packer/variables.json ./packer/using-ansible/app.json
+```
+
+```
+# stage_clean environment deployment
+ terraform plan
+ terraform apply -auto-approve=true
+```
+
+```
+# Application deployment
+ ansible-playbook site.yml --check
+ ansible-playbook site.yml
+```
+
+
+##### Дополнительное задание. Dynamic inventory.
+
+Для динамического Inventory в нашем случае формирование списка хостов возможно на основе данных либо от Google Compute Engine, либо от Terraform.
+Первый вариант более универсальный, не зависит от наличия средств управления инфраструктурой, но требует указания данных Service Account 
+для доступа к gcloud API.
+Второй вариант не требует данных авторизации GCP, однако требует установки отдельного приложения и актуален только если для управления инфраструктурой 
+используется Terraform.
+
+Файлы, созданные в рамках данного заданя, находятся в папке *ansible/dyn_inventory*. 
+
+**Реализация варианта 1**
+
+В первую очередь необходимо предоставить Ansible данные авторизации для взаимодействия с GCP (credentials).
+Предварительно создадим Service account key в формате JSON через оснастку 'APIs and Services -> Credentials' в Google Cloud Console.
+Далее, используем inventory-скрипт для GCE из репозитория Ansible: `https://github.com/ansible/ansible/blob/devel/contrib/inventory/gce.py`.
+В сопутствующем файле `gce.ini` указываем данные проекта и путь к json-файлу с ключами.
+Для того, чтобы указать *gce.py* расположение ini-файла, требуется задать значение переменной среды *GCE_INI_PATH*:
+`export GCE_INI_PATH=<full_path_to_gce_ini_file>`
+
+Для работы скрипта необходима *apache-libcloud*, ее можно предварительно установить с помощью `pip install apache-libcloud`.
+Для того, чтобы в репозиторий не были отправлены ключи авторизации сервисного аккаунта, необходимо добавить в файл *.gitignore* записи о 
+gce.ini и json-файле ключей, также создан файл *gce.ini.example* - пример заполнения ini-файла.
+
+Проверить работу скрипта можно с помощью его запуска с параметром `--list`, должны быть выведены полные данные об инстансах.
+Проверка работы Ansible на динамическом inventory, в качестве пути указываем скрипт: `ansible all -i ./dyn_inventory/gce.py -m ping`
+
+Группировка хостов в данном случае реализуется с помощью тегов инстансов (в загруженных playbook-ах имена групп хостов изменены под динамический inventory).
+
+Указание групп хостов по тегам производится следующим образом: `ansible tag_<tag_name>`. Пример: `ansible tag_reddit-app -m ping`
+
+Проверка деплоя конфигурации с помощью Ansible:
+```
+ ansible-playbook site.yml --check
+ ansible-playbook site.yml
+```
+
+----
+----
 
 Homework-10
 ===========

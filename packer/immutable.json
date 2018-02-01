@@ -2,6 +2,7 @@
   "variables": {
     "project_id": null,
     "source_image_family": null,
+    "ssh_username": "appuser",
     "machine_type": "f1-micro",
     "image_description": "Reddit App full baked image",
     "disk_size": "10",
@@ -17,7 +18,7 @@
       "image_family": "reddit-full",
       "source_image_family": "{{user `source_image_family`}}",
       "zone": "europe-west1-b",
-      "ssh_username": "brdm88",
+      "ssh_username": "{{user `ssh_username`}}",
       "machine_type": "{{user `machine_type`}}",
       "image_description": "{{user `image_description`}}",
       "disk_size": "{{user `disk_size`}}",
