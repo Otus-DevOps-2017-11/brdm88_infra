@@ -1,0 +1,8 @@
+﻿- name: Config the DB hosts
+  hosts:
+    - db
+    - tag_reddit-db
+  become: true
+  
+  roles:
+    - db
