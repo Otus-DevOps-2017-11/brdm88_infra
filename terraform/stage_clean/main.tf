@@ -17,9 +17,9 @@ terraform {
 
 # Define external IP
 
-resource "google_compute_address" "app_ip" {
-  name = "reddit-app-ip"
-}
+#resource "google_compute_address" "app_ip" {
+#  name = "reddit-app-ip"
+#}
 
 # Create VM instance for App server
 
@@ -42,7 +42,7 @@ resource "google_compute_instance" "app" {
     network = "default"
 
     access_config = {
-      nat_ip = "${google_compute_address.app_ip.address}"
+#      nat_ip = "${google_compute_address.app_ip.address}"
     }
   }
 
@@ -51,7 +51,7 @@ resource "google_compute_instance" "app" {
   }
 }
 
-# Add firewall rule to allow access to application
+# Add firewall rule to allow access to application at port 9292
 
 resource "google_compute_firewall" "firewall_puma" {
   name = "allow-puma-default"
@@ -67,6 +67,24 @@ resource "google_compute_firewall" "firewall_puma" {
 
   target_tags = ["reddit-app"]
 }
+
+# Add firewall rule to allow access to application at port 80 (via proxy)
+
+resource "google_compute_firewall" "firewall_puma" {
+  name = "allow-puma-default"
+
+  network = "default"
+
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+
+  target_tags = ["reddit-app"]
+}
+
 
 # Create VM instance for DB server
 
