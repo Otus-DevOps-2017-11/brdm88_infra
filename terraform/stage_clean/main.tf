@@ -30,7 +30,7 @@ resource "google_compute_instance" "app" {
 
   zone = "${var.region_zone}"
 
-  tags = ["reddit-app"]
+  tags = ["reddit-app", "http-server"]
 
   boot_disk {
     initialize_params {
@@ -42,7 +42,7 @@ resource "google_compute_instance" "app" {
     network = "default"
 
     access_config = {
-#      nat_ip = "${google_compute_address.app_ip.address}"
+      #      nat_ip = "${google_compute_address.app_ip.address}"
     }
   }
 
@@ -67,24 +67,6 @@ resource "google_compute_firewall" "firewall_puma" {
 
   target_tags = ["reddit-app"]
 }
-
-# Add firewall rule to allow access to application at port 80 (via proxy)
-
-resource "google_compute_firewall" "firewall_puma" {
-  name = "allow-puma-default"
-
-  network = "default"
-
-  allow {
-    protocol = "tcp"
-    ports    = ["80"]
-  }
-
-  source_ranges = ["0.0.0.0/0"]
-
-  target_tags = ["reddit-app"]
-}
-
 
 # Create VM instance for DB server
 
