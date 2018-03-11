@@ -45,6 +45,16 @@ variable app_workdir {
   description = "Reddit application working directory"
 }
 
+variable app_network_tags {
+#  type = "list"
+  description = "Network tags for App server instance"
+  default = ["reddit-app"]
+}
+
 variable database_url {
   description = "Database URL for reddit application"
+}
+
+variable deploy_by_tf {
+  description = "Deploy application using Terraform provisioners or not"
 }

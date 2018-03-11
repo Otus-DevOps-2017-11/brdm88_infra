@@ -30,3 +30,7 @@ variable db_instance_name {
   description = "Database VM instance name"
   default     = "reddit-db"
 }
+
+variable deploy_by_tf {
+  description = "Deploy application using Terraform provisioners or not"
+}

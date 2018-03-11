@@ -30,6 +30,8 @@ module "app" {
   app_port          = "${var.app_port}"
   app_user          = "${var.app_user}"
   app_workdir       = "${var.app_workdir}"
+  deploy_by_tf      = "${var.deploy_by_tf}"
+  app_network_tags  = "${var.app_network_tags}"
 
   # Connect to database server using internal ip address
   database_url = "${module.db.db_internal_ip}:27017"
@@ -45,6 +47,7 @@ module "db" {
   machine_type     = "${var.machine_type}"
   db_instance_name = "${var.db_instance_name}"
   db_disk_image    = "${var.db_disk_image}"
+  deploy_by_tf     = "${var.deploy_by_tf}"
 }
 
 module "vpc" {
