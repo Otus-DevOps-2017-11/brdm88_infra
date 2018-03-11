@@ -8,12 +8,12 @@ provider "google" {
 
 # Define remote backend for state file storage
 
-terraform {
-  backend "gcs" {
-    bucket = "tf-state-backend"
-    prefix = "terraform/prod"
-  }
-}
+#terraform {
+#  backend "gcs" {
+#    bucket = "tf-state-backend"
+#    prefix = "terraform/prod"
+#  }
+#}
 
 # Modules definition
 

@@ -1,7 +1,7 @@
-﻿# brdm88_infra
+# brdm88_infra
 Dmitry Bredikhin Infrastructure study repository
 
-[![Build Status](https://travis-ci.org/Otus-DevOps-2017-11/brdm88_infra.svg?branch=master)](https://travis-ci.org/Otus-DevOps-2017-11/brdm88_infra)
+[![Build Status](https://travis-ci.org/Otus-DevOps-2017-11/brdm88_infra.svg?branch=ansible-3)](https://travis-ci.org/Otus-DevOps-2017-11/brdm88_infra)
 
 
 
@@ -65,6 +65,9 @@ Terraform Lint, Ansible, ansible-lint. Данные команды описан�
 
 Для валидации конфигураций Packer и Terraform достаточно будет воспользоваться примером файла переменных из репозитория (`.example`), 
 т.к. нет необходимости в развертывыании реальной конфигурации.
+
+Стоит отметить, что в нашем случае для корректной работы `terraform init` с Remote Backend в среде Travis CI необходимо передавать в Travis CI 
+GCP Service Account Key для авторизации на Storage Bucket, по сему было решено отключить использование Remote Backend в Terraform.
 
 
 ----

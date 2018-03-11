@@ -1,7 +1,7 @@
 ---
 
 # Initial definitions
-dist: trusty
+dist: xenial
 language: python
 python: "2.7"
 
@@ -32,12 +32,12 @@ install:
   - pip install ansible-lint
   - touch ~/.ssh/appuser.pub && touch ~/.ssh/appuser
 
-# Perform the tests: packer validate, terraform validate, Terraform Lint, ansible-lint
+# Perform the tests: packer validate, terraform validate, tflint, ansible-lint
 script:
   - cd packer
   - packer validate -var-file=variables.json.example app.json
   - packer validate -var-file=variables.json.example db.json
-  - cd terraform/${WORK_ENV}
+  - cd ../terraform/${WORK_ENV}
   - terraform init
   - terraform validate --var-file=terraform.tfvars.example
   - tflint --var-file=terraform.tfvars.example --error-with-issues

@@ -1,7 +1,7 @@
 project = "project_id"
 region_zone = "europe-west2-a"
 project_pubkey_path = "~/.ssh/appuser.pub"
-project_ssh_user=appuser
+project_ssh_user = "appuser"
 public_key_path = "~/.ssh/appuser.pub"
 private_key_path = "~/.ssh/appuser"
 machine_type = "g1-small"
