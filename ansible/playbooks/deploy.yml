@@ -1,8 +1,8 @@
-﻿- name: Deploy the latest App version
+- name: Deploy the latest App version
   hosts:
     - app
     - tag_reddit-app
-  
+
   tasks:
     - name: Fetch the latest version of the application code from GitHub
       git:
@@ -10,12 +10,12 @@
         dest: /home/appuser/reddit
         version: monolith
       notify: restart puma
-    
+
     - name: Bundle install
       bundler:
         state: present
         chdir: /home/appuser/reddit
-      
+
   handlers:
   - name: restart puma
     become: true

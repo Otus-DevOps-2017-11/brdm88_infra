@@ -46,9 +46,9 @@ variable app_workdir {
 }
 
 variable app_network_tags {
-#  type = "list"
+  #  type = "list"
   description = "Network tags for App server instance"
-  default = ["reddit-app"]
+  default     = ["reddit-app"]
 }
 
 variable database_url {

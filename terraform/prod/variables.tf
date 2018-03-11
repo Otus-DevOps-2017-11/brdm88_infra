@@ -38,7 +38,7 @@ variable machine_type {
 
 variable deploy_by_tf {
   description = "Deploy application using Terraform provisioners or not"
-  default = false
+  default     = false
 }
 
 # App associated vars
@@ -70,7 +70,7 @@ variable app_workdir {
 
 variable app_network_tags {
   description = "Network tags for App server instance"
-  default = ["reddit-app"]
+  default     = ["reddit-app"]
 }
 
 # DB associated vars

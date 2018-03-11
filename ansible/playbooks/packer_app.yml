@@ -1,8 +1,8 @@
-﻿---
+---
 - name: Install Ruby and Bundler
   hosts: all
   become: true
-  
+
   tasks:
     - name: Install packages
       apt:

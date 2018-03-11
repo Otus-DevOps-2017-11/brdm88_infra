@@ -1,1 +1,0 @@
-export GCE_INI_PATH=~/brdm88_infra/ansible/dyn_inventory/gce.ini;~/brdm88_infra/ansible/dyn_inventory/gce.py

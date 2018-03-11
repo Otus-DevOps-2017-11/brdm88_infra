@@ -3,7 +3,6 @@
 # Case 1: deploy application using Terraform
 
 resource "google_compute_instance" "db_depl" {
-
   count = "${var.deploy_by_tf}"
 
   name = "${var.db_instance_name}"
@@ -52,9 +51,8 @@ resource "google_compute_instance" "db_depl" {
 # Case 2: DO NOT deploy application by Terraform
 
 resource "google_compute_instance" "db" {
-  
   count = "${1 - var.deploy_by_tf}"
-  
+
   name = "${var.db_instance_name}"
 
   machine_type = "${var.machine_type}"

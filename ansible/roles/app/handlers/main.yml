@@ -1,4 +1,4 @@
-﻿---
+---
 # handlers file for app
 
 - name: reload puma

@@ -22,7 +22,6 @@ resource "google_compute_address" "app_ip" {
 # Case 1: deploy application using Terraform
 
 resource "google_compute_instance" "app_depl" {
-
   count = "${var.deploy_by_tf}"
 
   name = "${var.app_instance_name}"
@@ -75,9 +74,8 @@ resource "google_compute_instance" "app_depl" {
 # Case 2: DO NOT deploy application using Terraform
 
 resource "google_compute_instance" "app" {
-
   count = "${1 - var.deploy_by_tf}"
-  
+
   name = "${var.app_instance_name}"
 
   machine_type = "${var.machine_type}"
