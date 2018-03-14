@@ -1,11 +1,23 @@
+# Packer
 packer/variables.json
+
+# Terraform
 *.tfstate
 *.tfstate.*.backup
 *.tfstate.backup
 *.tfvars
 .terraform/
+
+# Ansible
 *.retry
 ansible/dyn_inventory/*.json
 ansible/dyn_inventory/gce.ini
 *.pem
 jdauphant.nginx
+
+#Vagrant
+./vagrant/
+*.log
+*.pyc
+.molecule
+.cache
