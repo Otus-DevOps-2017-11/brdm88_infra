@@ -36,6 +36,11 @@ variable machine_type {
   default     = "g1-small"
 }
 
+variable deploy_by_tf {
+  description = "Deploy application using Terraform provisioners or not"
+  default     = false
+}
+
 # App associated vars
 
 variable app_instance_name {
@@ -61,6 +66,11 @@ variable app_user {
 variable app_workdir {
   description = "Reddit application working directory"
   default     = "/home/brdm88"
+}
+
+variable app_network_tags {
+  description = "Network tags for App server instance"
+  default     = ["reddit-app"]
 }
 
 # DB associated vars

@@ -19,14 +19,18 @@ resource "google_compute_address" "app_ip" {
 
 # Create VM instance for App server
 
-resource "google_compute_instance" "app" {
+# Case 1: deploy application using Terraform
+
+resource "google_compute_instance" "app_depl" {
+  count = "${var.deploy_by_tf}"
+
   name = "${var.app_instance_name}"
 
   machine_type = "${var.machine_type}"
 
   zone = "${var.region_zone}"
 
-  tags = ["reddit-app"]
+  tags = "${var.app_network_tags}"
 
   boot_disk {
     initialize_params {
@@ -64,6 +68,38 @@ resource "google_compute_instance" "app" {
   # Execute the deploy script
   provisioner "remote-exec" {
     script = "${path.module}/files/deploy.sh"
+  }
+}
+
+# Case 2: DO NOT deploy application using Terraform
+
+resource "google_compute_instance" "app" {
+  count = "${1 - var.deploy_by_tf}"
+
+  name = "${var.app_instance_name}"
+
+  machine_type = "${var.machine_type}"
+
+  zone = "${var.region_zone}"
+
+  tags = "${var.app_network_tags}"
+
+  boot_disk {
+    initialize_params {
+      image = "${var.app_disk_image}"
+    }
+  }
+
+  network_interface {
+    network = "default"
+
+    access_config = {
+      nat_ip = "${google_compute_address.app_ip.address}"
+    }
+  }
+
+  metadata {
+    sshKeys = "${var.project_ssh_user}:${file(var.public_key_path)}"
   }
 }
 

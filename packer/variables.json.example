@@ -6,6 +6,6 @@
   "disk_size": "40",
   "disk_type": "pd-standard",
   "network": "default",
-  "tags": "http-server"
+  "tags": "http-server",
   "ssh_username": "appuser"
 }

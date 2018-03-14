@@ -1,0 +1,44 @@
+---
+
+# Initial definitions
+dist: xenial
+language: python
+python: "2.7"
+
+# Branch limitations
+branches:
+  only:
+  - master
+  - ansible-3
+
+# Environments enumeration
+env:
+  - WORK_ENV=stage
+  - WORK_ENV=prod
+
+# Preliminary commands - ensure all packages are up to date
+before_install:
+  - sudo apt-get update -y
+
+# Install the needed software: Packer, Terraform, Ansible, tflint, ansible-lint, add SSH keys stubs
+install:
+  - wget https://releases.hashicorp.com/packer/1.2.1/packer_1.2.1_linux_amd64.zip
+  - sudo unzip -o packer_1.2.1_linux_amd64.zip -d /usr/local/bin
+  - wget https://releases.hashicorp.com/terraform/0.11.3/terraform_0.11.3_linux_amd64.zip
+  - sudo unzip -o terraform_0.11.3_linux_amd64.zip -d /usr/local/bin
+  - wget https://github.com/wata727/tflint/releases/download/v0.5.4/tflint_linux_amd64.zip
+  - sudo unzip -o tflint_linux_amd64.zip -d /usr/local/bin
+  - pip install ansible
+  - pip install ansible-lint
+  - touch ~/.ssh/appuser.pub && touch ~/.ssh/appuser
+
+# Perform the tests: packer validate, terraform validate, tflint, ansible-lint
+script:
+  - cd packer
+  - packer validate -var-file=variables.json.example app.json
+  - packer validate -var-file=variables.json.example db.json
+  - cd ../terraform/${WORK_ENV}
+  - terraform init
+  - terraform validate --var-file=terraform.tfvars.example
+  - tflint --var-file=terraform.tfvars.example --error-with-issues
+  - ansible-lint ./ansible/playbooks/*.yml

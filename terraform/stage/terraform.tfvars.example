@@ -1,10 +1,11 @@
 project = "project_id"
 region_zone = "europe-west2-a"
 project_pubkey_path = "~/.ssh/appuser.pub"
-project_ssh_user=appuser
+project_ssh_user = "appuser"
 public_key_path = "~/.ssh/appuser.pub"
 private_key_path = "~/.ssh/appuser"
 machine_type = "f1-micro"
+deploy_by_tf = true
 
 app_instance_name = "reddit-app-stage"
 db_instance_name = "reddit-db-stage"
@@ -13,6 +14,7 @@ app_disk_image = "reddit-app-base"
 app_port = "9292"
 app_user = "appuser"
 app_workdir = "/home/appuser"
+app_network_tags = ["reddit-app", "http-server"]
 
 db_disk_image = "reddit-db-base"
 
