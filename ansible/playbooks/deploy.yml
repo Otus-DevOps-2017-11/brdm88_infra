@@ -2,7 +2,8 @@
   hosts:
     - app
     - tag_reddit-app
-
+  become: true
+  
   tasks:
     - name: Fetch the latest version of the application code from GitHub
       git:
@@ -18,5 +19,4 @@
 
   handlers:
   - name: restart puma
-    become: true
     systemd: name=puma state=restarted
