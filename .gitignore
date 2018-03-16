@@ -15,7 +15,7 @@ ansible/dyn_inventory/gce.ini
 *.pem
 jdauphant.nginx
 
-#Vagrant and Molecule
+# Vagrant and Molecule
 ./vagrant/
 *.log
 *.pyc
