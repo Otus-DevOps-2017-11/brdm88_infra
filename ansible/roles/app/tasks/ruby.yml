@@ -6,7 +6,7 @@
   tags: ruby
   apt:
     name: "{{ item }}"
-    update_cache: yes
+    #update_cache: yes
     state: present
   with_items:
     - build-essential
