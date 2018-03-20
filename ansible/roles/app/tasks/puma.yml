@@ -1,4 +1,4 @@
-﻿---
+---
 
 # Setup and config Puma web server
 
@@ -8,12 +8,12 @@
     dest: "/home/{{ deploy_user }}/db_config"
     owner: "{{ deploy_user }}"
     group: "{{ deploy_user }}"
-  
+
 - name: Copy Puma server unit file
   template:
     src: puma.service.j2
     dest: /etc/systemd/system/puma.service
   notify: reload puma
-  
+
 - name: enable puma service
   systemd: name=puma enabled=yes
