@@ -4,6 +4,28 @@ Dmitry Bredikhin Infrastructure study repository
 [![Build Status](https://travis-ci.org/Otus-DevOps-2017-11/brdm88_infra.svg?branch=master)](https://travis-ci.org/Otus-DevOps-2017-11/brdm88_infra)
 
 
+Homework-13
+===========
+
+##### Задача 1. Vagrant.
+
+На рабочей машине был установлен Vagrant версии 2.0.2 и создана конфигурация для развертывания виртуальных машин подсистемы в локальном окружении.
+Настроен Provisioning приложения при помощи Ansible, доработаны роли **db** и **app** для их корректной работы в локальном окружении.
+
+В рамках дополнительного задания в Vagrantfile в секцию `provision` для виртуальной машины **appserver** добавлены extra_vars`-переменные определения
+default сайта для nginx, взятые из group_vars.
+
+Проверена корректность развертывания и работы приложения.
+
+
+##### Задача 2. Тестирование ролей Ansible.
+
+Тестирование проводилось внутри virtualenv, директория окружения, созданная virtualenv, добавлена в .gitignore.
+
+
+----
+----
+
 Homework-12
 ===========
 
