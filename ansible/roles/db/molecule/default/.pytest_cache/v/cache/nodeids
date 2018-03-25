@@ -1,5 +1,0 @@
-[
-  "tests/test_default.py::test_mongo_running_and_enabled[ansible://instance]", 
-  "tests/test_default.py::test_config_file[ansible://instance]", 
-  "tests/test_default.py::test_mongo_port_listen[ansible://instance]"
-]
