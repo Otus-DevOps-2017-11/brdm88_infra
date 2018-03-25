@@ -10,6 +10,7 @@ branches:
   only:
   - master
   - ansible-3
+  - ansible-4
 
 # Environments enumeration
 env:
@@ -37,8 +38,16 @@ script:
   - cd packer
   - packer validate -var-file=variables.json.example app.json
   - packer validate -var-file=variables.json.example db.json
-  - cd ../terraform/${WORK_ENV}
+  - cd using-ansible
+  - packer validate -var-file=../variables.json.example app.json
+  - packer validate -var-file=../variables.json.example db.json
+  - cd ../../terraform/${WORK_ENV}
   - terraform init
   - terraform validate --var-file=terraform.tfvars.example
   - tflint --var-file=terraform.tfvars.example --error-with-issues
   - ansible-lint ./ansible/playbooks/*.yml
+
+# Notify about build result in Slack chat channel
+notifications:
+  slack:
+    secure: vnNeFbQ0+t2vVSi9uSErlEeoAYn24avPc41wfGIurKGPTKFkaQpaMqKQCvoqvMporbuFaj09fH/7iLQ1k2O9AZ0s/gNhzWSeeu6a7s/UEspAR6JHjbYzJ6nUfEcfSgkOCP2C9m5LDTYB1kvbB1Wqs4S21ZhpJ3xwZDwTpdL592kYaX60qPIKueG7zGZjarCBq2jXun+do5W5CUyO77ixF4I2hg+aL8Q5dj8zAxzDbWyN0XQ6yBh6FYP4HyDDZNuEoA0kvy1xMzE6s+uMYtUmtXHlwyc4Piv5gGy76EvguhsJEt0YjhI4NhUwgUj8q16ri9Ce7aZrlzyJ3gnS7pDO4sZoK7j3Hgn5O+Fi61Tebims23oaf2QuzI9kjoligHO8+cF29+ffrxp3wDt4bcASShSqWqck1zCz6LkcU2Ehrt8nDpfTloaHDzuReby0fhrEZ6OZ1j3d9EswT8ZL+rrPAXPiC2bgm2zcEt1YvL9TC6toqo1PQUjj2rIJRhKRI4F36JJFxr0H4yCY0EweihKL/mfAq25iaWVSwG95eyefUDbgJXqsokDeNFgirM7omMp1i24DOe/yZCoUaPSTcz6S3oqU5SBTrqxK5rDB55D2+4hmHa4J0jHUGYhKy6qYNIz7BJV8qkXypbBGmENc95SZbbDc3En5x4bUzYbcX9UjusA=
