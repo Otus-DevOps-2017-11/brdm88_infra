@@ -10,6 +10,7 @@ branches:
   only:
   - master
   - ansible-3
+  - ansible-4
 
 # Environments enumeration
 env:
@@ -37,7 +38,10 @@ script:
   - cd packer
   - packer validate -var-file=variables.json.example app.json
   - packer validate -var-file=variables.json.example db.json
-  - cd ../terraform/${WORK_ENV}
+  - cd using-ansible
+  - packer validate -var-file=../variables.json.example app.json
+  - packer validate -var-file=../variables.json.example db.json
+  - cd ../../terraform/${WORK_ENV}
   - terraform init
   - terraform validate --var-file=terraform.tfvars.example
   - tflint --var-file=terraform.tfvars.example --error-with-issues

@@ -5,18 +5,5 @@
   debug:
     msg: "The host is in {{ env }} environment!"
 
-- name: Copy env variables file (DB config)
-  template:
-    src: db_config.j2
-    dest: /home/appuser/db_config
-    owner: appuser
-    group: appuser
-  
-- name: Copy Puma server unit file
-  copy:
-    src: puma.service
-    dest: /etc/systemd/system/puma.service
-  notify: reload puma
-  
-- name: enable puma service
-  systemd: name=puma enabled=yes
+- include: ruby.yml
+- include: puma.yml
